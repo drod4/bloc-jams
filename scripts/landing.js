@@ -20,5 +20,6 @@ window.onload = function() {
      window.addEventListener('scroll', function(event) {
          if (document.body.scrollTop >= scrollDistance) {
              animatePoints(pointsArray);   
-         }
- }
+            }
+        });
+};
