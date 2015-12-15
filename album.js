@@ -71,10 +71,17 @@ albumSongList.innerHTML = '';
          albumSongList.innerHTML += createSongRow(i + 1, album.songs[i].name, album.songs[i].length);
      }
  };
+
+var songListContainer = document.getElementsByClassName('album-view-song-list')[0];
+var playButtonTemplate = '<a class="album-song-button"><span class="ion-play"></span></a>';
  
  window.onload = function() {
      setCurrentAlbum(albumPicasso);
  };
+
+songListContainer.addEventListener('mouseover', function(event) {
+    console.log(event.target);
+     });
 
 var albums = [albumPicasso,albumMarconi, albumDrod];
 var index = 1; 
