@@ -4,7 +4,7 @@ var createSongRow = function(songNumber, songName, songLength) {
       '<tr class="album-view-song-item">' +
       '  <td class="song-item-number" data-song-number="' + songNumber + '">' + songNumber + '</td>' +
       '  <td class="song-item-title">' + songName + '</td>' +
-      '  <td class="song-item-duration">' + songLength + '</td>' +
+      '  <td class="song-item-duration">' + filterTimeCode(songLength) + '</td>' +
       '</tr>';
 
   var $row = $(template);
@@ -128,15 +128,44 @@ var setCurrentAlbum = function(album) {
 
 };
 
+var setCurrentTimeInPlayerBar = function (currentTime) {
+    var $currentTimeElement = $('.seek-control .current-time');
+    $currentTimeElement.text(currentTime);
+    
+};
+
+var setTotalTimeInPLayerBar = function(totalTime) {
+    var $totalTimeElement = $('.seek-control .total-time');
+     $totalTimeElement.text(totalTime);
+};
+
+var filterTimeCode = function(timeInSeconds) {
+    var seconds = Number.parseFloat(timeInSeconds);
+    var wholeSeconds = Math.floor(seconds);
+    var minutes = Math.floor(wholeSeconds / 60);
+    var remainingSeconds = wholeSeconds % 60;
+    
+    var output = minutes + ':';
+    
+    if (remainingSeconds < 10) {
+        output += '0';
+    
+    output += remainingSeconds;
+        
+        return output;
+};
+
 var updateSeekBarWhileSongPlays = function() {
    if (currentSoundFile) {
        // #10
        currentSoundFile.bind('timeupdate', function(event) {
            // #11
+           var currentTime = this.getTime();
+           var songLength = this.getDuration();
            var seekBarFillRatio = this.getTime() / this.getDuration();
            var $seekBar = $('.seek-control .seek-bar');
-
            updateSeekPercentage($seekBar, seekBarFillRatio);
+           setCurrentTimeInPlayerBar(filterTimeCode(currentTime));
        });
    }
 };
@@ -309,7 +338,8 @@ var updatePlayerBarSong = function(){
 
   // Change the play button to a pause button for the currently playing song
   $('.main-controls .play-pause').html(playerBarPauseButton);
-
+  setTotalTimeInPLayerBar(filterTimeCode(currentSongFromAlbum.length));
+    
 };
 
 // Combining instances of repeating variables
